@@ -1,5 +1,7 @@
 package gA.gAAcademy.JuanManuel.webServices.webServices.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,10 @@ public class TopicService {
 													// la base de datos
 		return t;
 	}
-
+	
+	public List<Topic> getAllTopics(){
+		List<Topic> topicList = topicRepository.findAll();
+		return topicList;
+	}
+	
 }

@@ -1,6 +1,9 @@
 package gA.gAAcademy.JuanManuel.webServices.webServices.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +19,14 @@ public class TopicController {
 
 	@PostMapping("/topic")
 	public Topic createTopic(@RequestBody Topic inputTopic) {
-		Topic returnTopic = topicService.createTopic(inputTopic);
-		return null;
+		Topic t = topicService.createTopic(inputTopic);
+		return t;
 	}
+	
+	@GetMapping("/topic")
+	public List<Topic> getAllTopics(){
+		List<Topic> topicList = topicService.getAllTopics();
+		return topicList;
+	}
+	
 }
