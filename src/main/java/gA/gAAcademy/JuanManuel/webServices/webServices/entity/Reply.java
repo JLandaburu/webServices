@@ -1,82 +1,66 @@
 package gA.gAAcademy.JuanManuel.webServices.webServices.entity;
 
 import java.util.Date;
-//import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-//import javax.persistence.OneToMany;
 
 @Entity
-public class Topic {
+public class Reply {
 
 	@Id
 	@GeneratedValue
 	private int id;
-
-	@Column(name = "title")
-	private String title;
-
-	@Column(name = "datePost")
-	private Date datePost;
-
+	
+	@Column(name = "topicId")
+	private int topicId;
+	
+	@Column(name = "dateReply")
+	private Date dateReply;
+	
 	@Column(name = "description")
 	private String description;
-
-	@Column(name = "author")
-	private int author; // author is int, not String
 	
-	/*@OneToMany(mappedBy = "topic")
-	private List<Reply> replies;*/
-
-	public Topic() {
+	@Column(name = "author")
+	private int author;
+	
+	public Reply() {
 	}
-
-	public Topic(String title, String description, int author) {
+	public Reply(int topicId, Date dateReply, String description, int author) {
 		super();
-		this.title = title;
-		Date d = new Date();
-		this.datePost = d;
+		this.topicId = topicId;
+		this.dateReply = dateReply;
 		this.description = description;
 		this.author = author;
 	}
-
-	public String getTitle() {
-		return title;
+	public int getTopicId() {
+		return topicId;
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTopicId(int topicId) {
+		this.topicId = topicId;
 	}
-
-	public Date getDatePost() {
-		return datePost;
+	public Date getDateReply() {
+		return dateReply;
 	}
-
-	public void setDatePost(Date datePost) {
-		this.datePost = datePost;
+	public void setDateReply(Date dateReply) {
+		this.dateReply = dateReply;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
 	public int getAuthor() {
 		return author;
 	}
-
 	public void setAuthor(int author) {
 		this.author = author;
 	}
-
 	public int getId() {
 		return id;
 	}
-
+	
 }
