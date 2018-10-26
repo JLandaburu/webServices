@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,15 +24,15 @@ public class TopicController {
 	TopicService topicService;
 
 	@PostMapping("/topic")
-	public Topic createTopic(@RequestBody Topic inputTopic) {
+	public ResponseEntity<?> createTopic(@RequestBody Topic inputTopic) {
 		Topic t = topicService.createTopic(inputTopic);
-		return t;
+		return new ResponseEntity<Topic>(t, HttpStatus.OK);
 	}
 	
 	@GetMapping("/topic")
-	public List<Topic> getAllTopics(){
+	public ResponseEntity<?> getAllTopics(){
 		List<Topic> topicList = topicService.getAllTopics();
-		return topicList;
+		return new ResponseEntity<List<Topic>>(topicList, HttpStatus.OK);
 	}
 	
 	@GetMapping("/topic/{id}")
@@ -54,5 +57,24 @@ public class TopicController {
 	public Topic updateTopic(@PathVariable int id, @RequestBody Topic updateTopic) {
 		Topic t = topicService.updateTopic(id, updateTopic);
 		return t;
+	}
+	
+	@DeleteMapping("/topic/{id}")
+	public ResponseEntity<?> deleteTopic(@PathVariable int id) {
+		topicService.deleteTopicFis(id);
+		String s = "El topic: " + id + " fue borrado exitosamente.";
+		return new ResponseEntity<String>(s, HttpStatus.OK); // usamos el constructor que recibe el mensaje y el estado
+	}
+	
+	@DeleteMapping("/topic/logic/{id}")
+	public ResponseEntity<?> deleteLogicTopic(@PathVariable int id){
+		int wasDeleted = topicService.deleteLogicTopic(id);
+		if(wasDeleted > 0) {
+			String message = "El topic " + wasDeleted + " fue borrado exitosamente.";
+			return new ResponseEntity<String>(message, HttpStatus.OK);
+		}
+		else {
+			return new ResponseEntity<String>("No se pudo borrar.", HttpStatus.NOT_FOUND);
+		}
 	}
 }

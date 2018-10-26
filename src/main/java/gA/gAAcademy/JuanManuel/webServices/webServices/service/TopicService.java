@@ -23,7 +23,12 @@ public class TopicService {
 	}
 	
 	public List<Topic> getAllTopics(){
-		List<Topic> topicList = topicRepository.findAll();
+		List<Topic> topicList = new ArrayList<>();
+		List<Topic> allTopics = topicRepository.findAll();
+		for (Topic t : allTopics) {
+			if(!t.isDeleted())
+				topicList.add(t);
+		}
 		return topicList;
 	}
 	
@@ -68,5 +73,20 @@ public class TopicService {
 		} //la fecha no la modificamos, crea la fecha de creacion (para modificarla deberia haber dos atributos, fecha de creacion y fecha de modificacion)
 		Topic t = topicRepository.save(toUpdateTopic);
 		return t;
+	}
+	
+	public void deleteTopicFis(int id) {
+		topicRepository.deleteById(id);
+	}
+	
+	public int deleteLogicTopic(int id) {
+		int toReturn = 0; // si el topic ya esta borrado, se retorna 0
+		Topic t = topicRepository.findById(id).get();
+		if(!t.isDeleted()) {
+			t.delete();
+			toReturn = t.getId(); // si se puede borrar el topic, se retorna el id del mismo
+			topicRepository.save(t);
+		}
+		return toReturn;
 	}
 }

@@ -20,13 +20,16 @@ public class Topic {
 	private String title;
 
 	@Column(name = "datePost")
-	private Date datePost;
+	private Date datePost = new Date();
 
 	@Column(name = "description")
 	private String description;
 
 	@Column(name = "author")
 	private int author; // author is int, not String
+	
+	@Column(name = "deleted")
+	private boolean deleted;
 	
 	/*@OneToMany(mappedBy = "topic")
 	private List<Reply> replies;*/
@@ -37,10 +40,9 @@ public class Topic {
 	public Topic(String title, String description, int author) {
 		super();
 		this.title = title;
-		Date d = new Date();
-		this.datePost = d;
 		this.description = description;
 		this.author = author;
+		this.deleted = false;
 	}
 
 	public String getTitle() {
@@ -77,6 +79,18 @@ public class Topic {
 
 	public int getId() {
 		return id;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public void delete() {
+		this.deleted = true;
 	}
 
 }
