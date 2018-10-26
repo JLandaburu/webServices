@@ -3,7 +3,6 @@ package gA.gAAcademy.JuanManuel.webServices.webServices.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,7 @@ public class TopicService {
 	}
 	
 	public Topic getTopicById(int id) {
-		Optional<Topic> ot = topicRepository.findById(id); //se llama findById porque el atributo se llama id (depende del nombre del atributo)
-		Topic t = ot.get();
+		Topic t = topicRepository.findById(id).get(); //se llama findById porque el atributo se llama id (depende del nombre del atributo)
 		return t;
 	}
 	

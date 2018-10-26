@@ -36,9 +36,9 @@ public class TopicController {
 	}
 	
 	@GetMapping("/topic/{id}")
-	public Topic getTopicById(@PathVariable int id){
+	public ResponseEntity<?> getTopicById(@PathVariable int id){
 		Topic t = topicService.getTopicById(id);
-		return t;
+		return new ResponseEntity<Topic>(t, HttpStatus.OK);
 	}
 	
 	@GetMapping("/topic/author/{author}")
