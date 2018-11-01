@@ -3,11 +3,14 @@ package gA.gAAcademy.JuanManuel.webServices.webServices.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import gA.gAAcademy.JuanManuel.webServices.webServices.entity.Reply;
 import gA.gAAcademy.JuanManuel.webServices.webServices.entity.Topic;
+import gA.gAAcademy.JuanManuel.webServices.webServices.repository.ReplyRepository;
 import gA.gAAcademy.JuanManuel.webServices.webServices.repository.TopicRepository;
 
 @Service
@@ -15,10 +18,19 @@ public class TopicService {
 
 	@Autowired
 	TopicRepository topicRepository;
-
+	
+	@Autowired
+	ReplyRepository replyRepository;
+	
 	public Topic createTopic(Topic inputTopic) {
 		Topic t = topicRepository.save(inputTopic); // save guarda el topic y lo devuelve el Topic como esta guardado en la base de datos
 		return t;
+	}
+	
+	public Reply createReply(Reply inputReply) {
+		inputReply.setDateReply(new Date());
+		Reply r = replyRepository.save(inputReply); // save guarda el topic y lo devuelve el Topic como esta guardado en la base de datos
+		return r;
 	}
 	
 	public List<Topic> getAllTopics(){
@@ -31,30 +43,26 @@ public class TopicService {
 		return topicList;
 	}
 	
+	public List<Reply> getAllReplies(int id){
+		return topicRepository.findById(id).get().getReplies();
+	}
+	
+	public List<Reply> getReplys(int id) throws NoSuchElementException{
+		return replyRepository.findByTopic(topicRepository.findById(id).get()).get();
+	}	
+	
 	public Topic getTopicById(int id) {
 		Topic t = topicRepository.findById(id).get(); //se llama findById porque el atributo se llama id (depende del nombre del atributo)
 		return t;
 	}
 	
 	public List<Topic> getTopicsByAuthor(int author){
-		List<Topic> topicList = new ArrayList<>();
-		List<Topic> allTopics = this.getAllTopics();
-		for (Topic t : allTopics) {
-			if(t.getAuthor() == author) {
-				topicList.add(t);
-			}
-		}
+		List<Topic> topicList = topicRepository.findByAuthor(author).get();
 		return topicList;
 	}
 	
 	public List<Topic> getTopicsByDatePost(Date datePost){
-		List<Topic> topicList = new ArrayList<>();
-		List<Topic> allTopics = this.getAllTopics();
-		for (Topic t : allTopics) {
-			if(t.getDatePost().equals(datePost)) {
-				topicList.add(t);
-			}
-		}
+		List<Topic> topicList = topicRepository.findByDatePost(datePost).get();
 		return topicList;
 	}
 	
@@ -73,6 +81,14 @@ public class TopicService {
 		return t;
 	}
 	
+	public Reply updateReplyById(int id, Reply reply) throws NoSuchElementException{
+		Reply toUpdate = replyRepository.findById(id).get();
+		if(reply.getDescription() != null) {
+			toUpdate.setDescription(reply.getDescription());
+		}
+		replyRepository.save(toUpdate);
+		return toUpdate;
+	}
 	public void deleteTopicFis(int id) {
 		topicRepository.deleteById(id);
 	}
@@ -87,4 +103,11 @@ public class TopicService {
 		}
 		return toReturn;
 	}
+	
+	public void deleteAllReplies(int id) {
+		Topic t = topicRepository.findById(id).get();
+		t.deleteReplies();
+		topicRepository.save(t);
+	}
+	
 }

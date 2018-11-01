@@ -2,20 +2,21 @@ package gA.gAAcademy.JuanManuel.webServices.webServices.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Reply {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(name = "topicId")
-	private int topicId;
 	
 	@Column(name = "dateReply")
 	private Date dateReply;
@@ -26,20 +27,18 @@ public class Reply {
 	@Column(name = "author")
 	private int author;
 	
+	@ManyToOne(cascade = CascadeType.ALL) //cascade all se define de los dos lados
+	@JoinColumn(name = "topic") //foreign key, en la base de datos se termina guardando solo el topicId //se le coloca el mismo nombre que el mappedBy en Topic
+	private Topic topic;
+	
 	public Reply() {
 	}
-	public Reply(int topicId, Date dateReply, String description, int author) {
+	public Reply(Date dateReply, String description, int author, Topic topic) {
 		super();
-		this.topicId = topicId;
 		this.dateReply = dateReply;
 		this.description = description;
 		this.author = author;
-	}
-	public int getTopicId() {
-		return topicId;
-	}
-	public void setTopicId(int topicId) {
-		this.topicId = topicId;
+		this.topic = topic;
 	}
 	public Date getDateReply() {
 		return dateReply;
@@ -61,6 +60,12 @@ public class Reply {
 	}
 	public int getId() {
 		return id;
+	}
+	public Topic getTopic() {
+		return topic;
+	}
+	public void setTopic(Topic topic) {
+		this.topic = topic;
 	}
 	
 }

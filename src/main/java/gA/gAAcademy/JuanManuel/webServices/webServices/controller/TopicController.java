@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import gA.gAAcademy.JuanManuel.webServices.webServices.entity.Reply;
 import gA.gAAcademy.JuanManuel.webServices.webServices.entity.Topic;
 import gA.gAAcademy.JuanManuel.webServices.webServices.service.TopicService;
 
@@ -29,10 +30,22 @@ public class TopicController {
 		return new ResponseEntity<Topic>(t, HttpStatus.OK);
 	}
 	
+	@PostMapping("/reply")
+	public ResponseEntity<?> createReply(@RequestBody Reply inputReply) {
+		Reply r = topicService.createReply(inputReply);
+		return new ResponseEntity<Reply>(r, HttpStatus.OK);
+	}
+	
 	@GetMapping("/topic")
 	public ResponseEntity<?> getAllTopics(){
 		List<Topic> topicList = topicService.getAllTopics();
 		return new ResponseEntity<List<Topic>>(topicList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/topic/{id}/replies")
+	public ResponseEntity<?> getAllReplies(@PathVariable int id){
+		List<Reply> replyList = topicService.getAllReplies(id);
+		return new ResponseEntity<List<Reply>>(replyList, HttpStatus.OK);
 	}
 	
 	@GetMapping("/topic/{id}")
@@ -77,4 +90,5 @@ public class TopicController {
 			return new ResponseEntity<String>("No se pudo borrar.", HttpStatus.NOT_FOUND);
 		}
 	}
+	
 }
